@@ -1,2 +1,0 @@
-import{a as n,a1 as l,j as t,a2 as r,W as i}from"./index-6TQir7lg.js";import{B as c}from"./badge-3T_1J6q-.js";import{T as u}from"./triangle-alert-DZAw81Ry.js";function f({row:a}){const s=a.status==="absence"&&a.absence?n[a.absence]:l[a.status];return t.jsx(c,{tone:r[a.status],children:s})}function p({flags:a}){const s=a.filter(e=>!e.startsWith("absence_"));return s.length?t.jsx("span",{title:s.map(e=>i[e]??e).join(`
-`),className:"inline-flex text-amber-600",children:t.jsx(u,{className:"h-3.5 w-3.5"})}):null}export{f as D,p as F};
