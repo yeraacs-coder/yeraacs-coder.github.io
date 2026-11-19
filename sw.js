@@ -2,7 +2,7 @@
 // Кэшируется только оболочка приложения (HTML/JS/CSS/иконки).
 // Запросы к API (Supabase) НИКОГДА не кэшируются и не откладываются: отметка возможна только онлайн,
 // время фиксирует сервер в момент получения запроса.
-const CACHE = "tchr-shell-v1";
+const CACHE = "tchr-shell-v2";
 const SHELL = ["/", "/manifest.webmanifest", "/icons/icon-192.png", "/icons/icon-512.png"];
 
 self.addEventListener("install", (e) => {
@@ -22,7 +22,9 @@ self.addEventListener("fetch", (e) => {
     e.respondWith(fetch(req).catch(() => caches.match("/")));
     return;
   }
-  if (url.pathname.startsWith("/assets/") || url.pathname.startsWith("/icons/") || url.pathname.startsWith("/fonts/")) {
+  // файлы сборки (с хешем в имени) лежат в корне; sw.js и manifest не кэшируем навсегда
+  const isBuildFile = /\.(js|css)$/.test(url.pathname) && url.pathname !== "/sw.js";
+  if (isBuildFile || url.pathname.startsWith("/icons/") || url.pathname.startsWith("/fonts/")) {
     e.respondWith(
       caches.match(req).then((hit) => hit || fetch(req).then((res) => {
         if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); }
